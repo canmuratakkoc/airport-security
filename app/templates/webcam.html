@@ -73,19 +73,20 @@
     const socket  = io();
     let processing = false;
 
-      // 1) IP kamerayı başlat
-      function startIPCamera() {
-        video.src = "http://192.168.1.88:4747/video?1920x1080";
-        video.crossOrigin = "anonymous";
-        video.onloadeddata = () => {
-          // Kamera hazır olunca her 200 ms'de detect çağır
+    // 1) Webcam başlat
+    async function startCamera() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        video.srcObject = stream;
+        video.onloadedmetadata = () => {
+          // Kamera hazır olunca her saniye detect çağır
           setInterval(captureAndSend, 200);
         };
-        video.onerror = () => {
-          alert("IP kamera başlatılamadı");
-        };
+      } catch (err) {
+        alert("Webcam başlatılamadı: " + err);
       }
-      startIPCamera();
+    }
+    startCamera();
 
     // 2) Kareyi al, websocket ile gönder
     function captureAndSend() {
