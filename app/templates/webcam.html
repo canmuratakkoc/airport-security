@@ -68,8 +68,8 @@
         const stream = await navigator.mediaDevices.getUserMedia({ video: true });
         video.srcObject = stream;
         video.onloadedmetadata = () => {
-          // Kamera hazır olunca her saniye detect çağır
-          setInterval(captureAndSend, 200);
+          // Kamera hazır olduğunda ilk kareyi gönder
+          captureAndSend();
         };
         uploader.classList.add("invisible");
       } catch (err) {
@@ -104,11 +104,15 @@
         preview.hidden = false;
       }
       processing = false;
+      // Sonuç alındığında bir sonraki kareyi gönder
+      captureAndSend();
     });
 
     socket.on("error", err => {
       console.error("Hata:", err);
       processing = false;
+      // Hata durumunda da döngüyü sürdür
+      captureAndSend();
     });
   </script>
 </body>
