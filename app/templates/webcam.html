@@ -29,11 +29,6 @@
       border-radius: 0.25rem;
       border: 1px solid #dee2e6;
     }
-    #spinner {
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-    }
   </style>
 </head>
 <body class="py-5">
@@ -43,20 +38,14 @@
 
         <h3 class="text-center mb-4">Webcam ile Sürekli Silah Tespiti (Model B)</h3>
 
-        <div class="uploader" id="uploader">
-          <!-- Canlı video -->
-          <video id="video" autoplay muted playsinline></video>
-          <!-- Spinner -->
-          <div id="spinner" hidden>
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">Yükleniyor...</span>
-            </div>
-          </div>
-        </div>
-
         <!-- Annotated sonuç -->
         <div class="text-center mt-4">
           <img id="preview" src="" alt="Annotated" hidden />
+        </div>
+
+        <div class="uploader" id="uploader">
+          <!-- Canlı video -->
+          <video id="video" autoplay muted playsinline></video>
         </div>
 
       </div>
@@ -68,8 +57,8 @@
   <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
   <script>
     const video   = document.getElementById("video");
-    const spinner = document.getElementById("spinner");
     const preview = document.getElementById("preview");
+    const uploader = document.getElementById("uploader");
     const socket  = io();
     let processing = false;
 
@@ -82,6 +71,7 @@
           // Kamera hazır olunca her saniye detect çağır
           setInterval(captureAndSend, 200);
         };
+        uploader.classList.add("invisible");
       } catch (err) {
         alert("Webcam başlatılamadı: " + err);
       }
@@ -92,7 +82,6 @@
     function captureAndSend() {
       if (processing) return;
       processing = true;
-      spinner.hidden = false;
 
       const canvas = document.createElement("canvas");
       canvas.width  = video.videoWidth;
@@ -114,13 +103,11 @@
         preview.src = "data:image/jpeg;base64," + data.annotated_image;
         preview.hidden = false;
       }
-      spinner.hidden = true;
       processing = false;
     });
 
     socket.on("error", err => {
       console.error("Hata:", err);
-      spinner.hidden = true;
       processing = false;
     });
   </script>
