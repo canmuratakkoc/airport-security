@@ -40,7 +40,7 @@ def predict_model_a(file_storage):
 def predict_model_b(file_storage):
     model = _get_model("MODEL_B_PATH")
     img = _read_image(file_storage)
-    results = model(img, conf=0.2)
+    results = model(img)
     res = results[0]
     preds = res.to_df().to_dict(orient="records")
     annotated = res.plot()
@@ -53,7 +53,7 @@ def predict_model_b(file_storage):
 def predict_model_b_bytes(data: bytes):
     model = _get_model("MODEL_B_PATH")
     img = _read_image_bytes(data)
-    results = model(img, conf=0.2)
+    results = model(img)
     res = results[0]
     preds = res.to_df().to_dict(orient="records")
     annotated = res.plot()
