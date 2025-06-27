@@ -43,6 +43,8 @@
           <img id="preview" src="" alt="Annotated" hidden />
         </div>
 
+
+
         <div class="uploader" id="uploader">
           <!-- Canlı video -->
           <video id="video" autoplay muted playsinline></video>
@@ -98,10 +100,28 @@
       }, "image/jpeg", 0.8);
     }
 
+    let audioCtx;
+    function playAlert() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = 880;
+      gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+      osc.connect(gain).connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.5);
+    }
+
     socket.on("result", data => {
       if (data.annotated_image) {
         preview.src = "data:image/jpeg;base64," + data.annotated_image;
         preview.hidden = false;
+      }
+      if (data.alert) {
+        playAlert();
       }
       processing = false;
       // Sonuç alındığında bir sonraki kareyi gönder
