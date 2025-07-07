@@ -26,7 +26,7 @@ def _read_image_bytes(data: bytes):
 def predict_model_a(file_storage):
     model = _get_model("MODEL_A_PATH")
     img = _read_image(file_storage)
-    results = model(img, conf=0.2)     # eşiği %20’ye düşürdük
+    results = model(img, conf=0.4)     # eşiği %20’ye düşürdük
     res = results[0]                   # tek sonuç
     # JSON verisi
     preds = res.to_df().to_dict(orient="records")
@@ -40,7 +40,7 @@ def predict_model_a(file_storage):
 def predict_model_b(file_storage):
     model = _get_model("MODEL_B_PATH")
     img = _read_image(file_storage)
-    results = model(img)
+    results = model(img, conf=0.4)
     res = results[0]
     preds = res.to_df().to_dict(orient="records")
     annotated = res.plot()
@@ -53,7 +53,7 @@ def predict_model_b(file_storage):
 def predict_model_b_bytes(data: bytes):
     model = _get_model("MODEL_B_PATH")
     img = _read_image_bytes(data)
-    results = model(img)
+    results = model(img, conf=0.4)
     res = results[0]
     preds = res.to_df().to_dict(orient="records")
     annotated = res.plot()

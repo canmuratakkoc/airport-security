@@ -21,9 +21,9 @@ def handle_frame(data):
         has_weapon = False
         for pred in result.get("predictions", []):
             name = str(pred.get("name", "")).lower()
-            if name in {"face", "person", "head"}:
+            if name in {"face"}:
                 has_face = True
-            if name in ALERT_WEAPONS:
+            if name in {"gun", "knife"}:
                 has_weapon = True
 
         result["alert"] = has_face and has_weapon
