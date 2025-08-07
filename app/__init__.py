@@ -1,13 +1,6 @@
 from flask import Flask
 from flask_cors import CORS
 from .socket_events import socketio
-from flask_sqlalchemy import SQLAlchemy
-from flask_jwt_extended import JWTManager
-from flask_migrate import Migrate
-
-db = SQLAlchemy()
-jwt = JWTManager()
-migrate = Migrate()
 
 
 def create_app(test = False):
@@ -17,9 +10,6 @@ def create_app(test = False):
     app.config.from_object('app.config.Config')
     app.config['TESTING'] = test
 
-    db.init_app(app)
-    jwt.init_app(app)
-    migrate.init_app(app, db)
     socketio.init_app(app, cors_allowed_origins="*")
 
     from app.routes import analyze_blueprint

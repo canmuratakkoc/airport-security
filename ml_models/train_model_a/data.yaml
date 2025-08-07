@@ -1,0 +1,7 @@
+train: ../data_cleaned/train/images
+val:   ../data_cleaned/valid/images
+
+nc: 15
+names: ["Gun","Knife","Wrench","Pliers","Scissors","Lighter","Battery",
+        "Bat","Razor_blade","Saw_blade","Fireworks","Hammer","Screwdriver",
+        "Dart","Pressure_vessel"]
